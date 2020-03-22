@@ -2,7 +2,7 @@ package valueObject;
 
 import enumerators.Continents;
 
-public class DataManager {
+public class Country {
 
 	private int code;
 	private String countryName;
@@ -10,13 +10,17 @@ public class DataManager {
 	private float surfaceArea;
 	private String headOfState;
 	
-	public DataManager(int code,String countryName,Continents continent,float surfaceArea,String headOfState)
+	public Country(int code,String countryName,Continents continent,float surfaceArea,String headOfState)
 	{
 		this.code = code;
 		this.countryName = countryName;
 		this.continent = continent;
 		this.surfaceArea = surfaceArea;
 		this.headOfState = headOfState;
+	}
+	
+	public Country(){
+		
 	}
 
 	public int getCode() {

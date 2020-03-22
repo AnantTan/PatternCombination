@@ -8,6 +8,6 @@ public enum Continents {
 	South_America,
 	Africa,
 	Oceania,
-	Antractica; 
+	Antarctica; 
 
 }
