@@ -8,7 +8,6 @@ public enum DatabaseConnection {
 
 	Connection;
 	private Connection connection;
-	public int i;
 
 	public static DatabaseConnection getInstance() {
 		return Connection;

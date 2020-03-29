@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import dataObjectConcrete.ConcreteClass;
+import dataObjectConcrete.CountryDAO;
 import enumerators.Continents;
 import enumerators.DatabaseConnection;
 import valueObject.Country;
@@ -17,7 +18,10 @@ public class Client {
 
 	BufferedReader bufferedReader;
 	int numberEntered;
-	ConcreteClass concreteClass;
+	CountryDAO countryDAO;
+	private Country country;
+	private ArrayList<Country> countries;
+	private String userInput;
 
 	private Client() {
 		bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -70,37 +74,46 @@ public class Client {
 	}
 
 	private void workAccordingToInput(int num) {
+		
 		switch (num) {
 		case 1:
 			System.out.println("1111");
-			concreteClass = new ConcreteClass();
-			Country country = concreteClass.listAllCountries();
-			System.out.println(country);
+			countryDAO = new CountryDAO();
+			showAllCountries(countries = countryDAO.listAllCountries());
 			break;
 
 		case 2:
 			System.out.println("Enter a country code");
-			int countryCode = 0;
-			try {
-				countryCode = Integer.parseInt(bufferedReader.readLine());
-			} catch (Exception e) {
-				System.out.println("Please enter a number");
-			}
-			concreteClass = new ConcreteClass();
-			concreteClass.findCountryByCountryCode(countryCode);
+			userInput = getUserInput();
+			countryDAO = new CountryDAO();
+			country = countryDAO.findCountryByCountryCode(userInput);
+			System.out.println("Country found: " + country.getCountryName());
 			break;
 
 		case 3:
 			System.out.println("Enter a name of a country");
-			String countryName = "";
-			try {
-				countryName = bufferedReader.readLine();
-			}catch (Exception e) {
-				System.out.println("Please");
-			}
-			concreteClass = new ConcreteClass();
-			concreteClass.findCountryByName(countryName);
+			userInput = getUserInput();
+			countryDAO = new CountryDAO();
+			showAllCountries(countryDAO.findCountryByName(userInput));
 			break;
+		}
+	}
+	
+	private String getUserInput()
+	{
+		String input = "";
+		try {
+			input = bufferedReader.readLine();
+		} catch (Exception e) {
+			System.out.println("Something is wrong! Please follow the instructions");
+		}
+		return input;
+	}
+	
+	private void showAllCountries(ArrayList<Country> countries)
+	{
+		for (Country country : countries) {
+			System.out.println(country.getCountryName());
 		}
 	}
 
