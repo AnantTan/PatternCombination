@@ -25,33 +25,9 @@ public class Client {
 
 	private Client() {
 		bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-		// data();
-		// start();
 		giveUserChoice();
 	}
 
-//	private void data()
-//	{
-//		DatabaseConnection connection = DatabaseConnection.getInstance();
-//		Connection connection2 = connection.getDatabaseConnection();
-//		try {
-//		PreparedStatement prepareStatement = connection2.prepareStatement("INSERT INTO country VALUES(?,?,?,?,?)");
-//		prepareStatement.setInt(1, 89);
-//		prepareStatement.setString(2, "Man");
-//		prepareStatement.setString(3, String.valueOf(Continents.Antarctica));
-//		prepareStatement.setFloat(4, 11);
-//		prepareStatement.setString(5, "myself");
-//	int	count = prepareStatement.executeUpdate();
-//		if (count > 0) {
-//			JOptionPane.showMessageDialog(null, "Your Verfication is Pending");
-//
-//		}
-//		
-//		}catch (Exception e) {
-//			System.out.println(e);
-//		}
-//	}
-//	
 	private void giveUserChoice() {
 		// a loop to ask the user for choice again and again
 		do {
@@ -74,12 +50,12 @@ public class Client {
 	}
 
 	private void workAccordingToInput(int num) {
-		
+
 		switch (num) {
 		case 1:
 			System.out.println("1111");
 			countryDAO = new CountryDAO();
-			showAllCountries(countries = countryDAO.listAllCountries());
+			VisualUserInteraction.showAllCountries(countries = countryDAO.listAllCountries());
 			break;
 
 		case 2:
@@ -87,20 +63,19 @@ public class Client {
 			userInput = getUserInput();
 			countryDAO = new CountryDAO();
 			country = countryDAO.findCountryByCountryCode(userInput);
-			System.out.println("Country found: " + country.getCountryName());
+			VisualUserInteraction.resultOfFindingCountryByCode(country);
 			break;
 
 		case 3:
 			System.out.println("Enter a name of a country");
 			userInput = getUserInput();
 			countryDAO = new CountryDAO();
-			showAllCountries(countryDAO.findCountryByName(userInput));
+			VisualUserInteraction.showAllCountries(countryDAO.findCountryByName(userInput));
 			break;
 		}
 	}
-	
-	private String getUserInput()
-	{
+
+	private String getUserInput() {
 		String input = "";
 		try {
 			input = bufferedReader.readLine();
@@ -108,13 +83,6 @@ public class Client {
 			System.out.println("Something is wrong! Please follow the instructions");
 		}
 		return input;
-	}
-	
-	private void showAllCountries(ArrayList<Country> countries)
-	{
-		for (Country country : countries) {
-			System.out.println(country.getCountryName());
-		}
 	}
 
 	public static void main(String[] args) {

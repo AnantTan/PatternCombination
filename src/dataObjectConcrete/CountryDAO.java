@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dataAccessInterface.CountryDataModel;
+import enumerators.Continents;
 import enumerators.DatabaseConnection;
 import valueObject.Country;
 
@@ -22,17 +23,17 @@ public class CountryDAO implements CountryDataModel {
 		DatabaseConnection instance = DatabaseConnection.getInstance();// get instance of the enumerator
 		connection = instance.getDatabaseConnection();// get the database connection from enumerator
 		ArrayList<Country> countryList = new ArrayList<>();
-		Country country = new Country();
 		try {
-			prepareStatement = connection.prepareStatement("SELECT DISTINCT name FROM country");
+			prepareStatement = connection.prepareStatement("SELECT * FROM country");
 			ResultSet resultSet = prepareStatement.executeQuery();
 			if (!resultSet.isBeforeFirst()) {
 				System.out.println("No data available");
-				country = new Country();
-				country.setCountryName("");
 			} else {
 				while (resultSet.next()) {
-					country = new Country(0, resultSet.getString(1), null, 0, null);
+					country = new Country.CountryBuilder().code(resultSet.getString(1))
+							.countryName(resultSet.getString(2)).surfaceArea(resultSet.getFloat(4))
+							.headOfState(resultSet.getString(5)).continent(Continents.valueOf(resultSet.getString(3)))
+							.build();
 					countryList.add(country);
 				}
 				connection.close();// close the connection when the data has been retrieved
@@ -50,17 +51,17 @@ public class CountryDAO implements CountryDataModel {
 		DatabaseConnection instance = DatabaseConnection.getInstance();
 		connection = instance.getDatabaseConnection();
 		try {
-			prepareStatement = connection.prepareStatement("SELECT name FROM country where code = '" + code + "'");
+			prepareStatement = connection
+					.prepareStatement("SELECT name,continent,headofstate FROM country where code = '" + code + "'");
 			ResultSet resultSet = prepareStatement.executeQuery();
 			// country = new Country();
 
 			if (!resultSet.isBeforeFirst()) {
 				System.out.println("No data available");
-				country = new Country();
-				country.setCountryName("");
 			} else {
 				while (resultSet.next()) {
-					country = new Country(0, resultSet.getString(1), null, 0, null);
+					country = new Country.CountryBuilder().countryName(resultSet.getString(1)).continent(Continents.valueOf(resultSet.getString(2)))
+							.headOfState(resultSet.getString(3)).build();
 				}
 				connection.close();// close the database connection
 			}
@@ -78,17 +79,15 @@ public class CountryDAO implements CountryDataModel {
 		connection = instance.getDatabaseConnection();
 		ArrayList<Country> countryList = new ArrayList<>();
 		try {
-			prepareStatement = connection
-					.prepareStatement("SELECT name FROM country where name LIKE '%" + countryToBeFound + "%'");
+			prepareStatement = connection.prepareStatement(
+					"SELECT * FROM country where name LIKE '%" + countryToBeFound + "%'");
 			ResultSet resultSet = prepareStatement.executeQuery();
-			country = new Country();
-			
 			if (!resultSet.isBeforeFirst()) {
-				System.out.println("No data available");
-				country.setCode(-1);
 			} else {
 				while (resultSet.next()) {
-					country = new Country(0, resultSet.getString(1), null, 0, null);
+					country = new Country.CountryBuilder().code(resultSet.getString(1))
+							.countryName(resultSet.getString(2)).continent(Continents.valueOf(resultSet.getString(3)))
+							.headOfState(resultSet.getString(5)).surfaceArea(resultSet.getFloat(4)).build();
 					countryList.add(country);
 				}
 				connection.close();// close the connection

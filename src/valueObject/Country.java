@@ -4,63 +4,82 @@ import enumerators.Continents;
 
 public class Country {
 
-	private int code;
-	private String countryName;
+	private final String code;
+	private final String countryName;
 	private Continents continent;
 	private float surfaceArea;
 	private String headOfState;
 	
-	public Country(int code,String countryName,Continents continent,float surfaceArea,String headOfState)
+	private Country(CountryBuilder builder)
 	{
-		this.code = code;
-		this.countryName = countryName;
-		this.continent = continent;
-		this.surfaceArea = surfaceArea;
-		this.headOfState = headOfState;
-	}
-	
-	public Country(){
-		
+		this.code = builder.code;
+		this.countryName = builder.countryName;
+		this.continent = builder.continent;
+		this.surfaceArea = builder.surfaceArea;
+		this.headOfState = builder.headOfState;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
 	}
 
 	public String getCountryName() {
 		return countryName;
 	}
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
-
 	public Continents getContinent() {
 		return continent;
-	}
-
-	public void setContinent(Continents continent) {
-		this.continent = continent;
 	}
 
 	public float getSurfaceArea() {
 		return surfaceArea;
 	}
 
-	public void setSurfaceArea(float surfaceArea) {
-		this.surfaceArea = surfaceArea;
-	}
-
 	public String getHeadOfState() {
 		return headOfState;
 	}
-
-	public void setHeadOfState(String headOfState) {
-		this.headOfState = headOfState;
-	}
 	
+	public static class CountryBuilder
+	{
+		private String code;
+		private String countryName;
+		private Continents continent;
+		private float surfaceArea;
+		private String headOfState;
+		
+		public CountryBuilder code(final String code)
+		{
+			this.code = code;
+			return this;
+		}
+		
+		public CountryBuilder countryName(final String countryName)
+		{
+			this.countryName = countryName;
+			return this;
+		}
+		
+		public CountryBuilder continent(final Continents continent)
+		{
+			this.continent = continent;
+			return this;
+		}
+		
+		public CountryBuilder surfaceArea(final float surfaceArea)
+		{
+			this.surfaceArea = surfaceArea;
+			return this;
+		}
+	
+		public CountryBuilder headOfState(final String headOfState)
+		{
+			this.headOfState = headOfState;
+			return this;
+		}
+		
+		public Country build()
+		{
+			return new Country(this);
+		}
+	}	
 }
