@@ -9,5 +9,5 @@ public interface CountryDataModel {
 	public ArrayList<Country> listAllCountries();
 	public Country findCountryByCountryCode(String code);
 	public ArrayList<Country> findCountryByName(String countryToBeFound);
-	public void addNewCountry(String details);
+	public void addNewCountry(Country country);
 }
