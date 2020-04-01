@@ -2,6 +2,7 @@ package enumerators;
 
 public enum Continents {
 
+	// name of continents
 	Asia("Asia"), Europe("Europe"), NorthAmerica("North America"), SouthAmerica("South America"), Africa("Africa"),
 	Oceania("Oceania"), Antarctica("Antarctica");
 
@@ -11,6 +12,7 @@ public enum Continents {
 		this.contientName = name;
 	}
 
+	// mapper class to match the entries in the database
 	public final static Continents getContinent(String continent) {
 		switch (continent) {
 		case "Asia":
@@ -33,6 +35,6 @@ public enum Continents {
 	}
 
 	public String getContinentName() {
-		return contientName;
+		return contientName;// return the name of the continent
 	}
 }

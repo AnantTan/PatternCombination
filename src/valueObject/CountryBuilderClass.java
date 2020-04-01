@@ -2,15 +2,16 @@ package valueObject;
 
 import enumerators.Continents;
 
-public class Country {
+public class CountryBuilderClass {
 
-	private final String code;
+	private String code;
 	private String countryName;
 	private Continents continent;
 	private float surfaceArea;
 	private String headOfState;
 
-	private Country(CountryBuilder builder) {
+	private CountryBuilderClass(CountryBuilder builder) {
+		// putting values in the global variables from the static builder class
 		this.code = builder.code;
 		this.countryName = builder.countryName;
 		this.continent = builder.continent;
@@ -18,6 +19,7 @@ public class Country {
 		this.headOfState = builder.headOfState;
 	}
 
+	// getters to access the values of the private variables
 	public String getCode() {
 		return code;
 	}
@@ -38,6 +40,8 @@ public class Country {
 		return headOfState;
 	}
 
+	// implementing the builder pattern
+	// static inner class to create object of outer class
 	public static class CountryBuilder {
 		private String code;
 		private String countryName;
@@ -70,8 +74,8 @@ public class Country {
 			return this;
 		}
 
-		public Country build() {
-			return new Country(this);
+		public CountryBuilderClass build() {
+			return new CountryBuilderClass(this);// return the object country builder
 		}
 	}
 }

@@ -4,18 +4,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import dataObjectConcrete.CountryDAO;
 import enumerators.Continents;
-import valueObject.Country;
+import valueObject.CountryBuilderClass;
 
 public class Client {
 
 	BufferedReader bufferedReader;
 	private int numberEntered, selectContinentName;
 	private CountryDAO countryDAO;
-	private Country country;
+	private CountryBuilderClass countryBuilderClass;
 	private String enterCountryCode, enterCountryName, enterHeadOfState, continentName;
 	private float enterSurfaceArea;
 
-	private Client() {
+	Client() {
 		bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 		giveUserChoice();
 	}
@@ -28,86 +28,97 @@ public class Client {
 	}
 
 	private void start() {
-		VisualUserInteraction.getUserInteraction();
+		VisualUserInteraction.getUserInteraction();// getting user interaction by printing lines
 		try {
-			numberEntered = Integer.parseInt(bufferedReader.readLine());
+			numberEntered = Integer.parseInt(bufferedReader.readLine());// get user input
 		} catch (Exception e) {
 			System.out.println("Please enter a number");
 			giveUserChoice();
 		}
-		workAccordingToInput(numberEntered);
+		workAccordingToInput(numberEntered);// proceed according to the user input
 	}
 
 	private void workAccordingToInput(int num) {
 
 		switch (num) {
+		// this case is responsible for printing all the countries in the database
 		case 1:
 			countryDAO = new CountryDAO();
-			VisualUserInteraction.showAllCountries(countryDAO.listAllCountries());
+			VisualUserInteraction.showAllCountries(countryDAO.listAllCountries());// print all the countries
 			break;
 
+		// this case is responsible for printing the country at a given code in the
+		// database
 		case 2:
-			VisualUserInteraction.enterCountryCode();
-			enterCountryCode = getUserInputAsString();
-			countryDAO = new CountryDAO();
-			country = countryDAO.findCountryByCountryCode(enterCountryCode);
-			VisualUserInteraction.resultOfFindingCountryByCode(country);
+			VisualUserInteraction.enterCountryCode();// print out the related prompt
+			enterCountryCode = getUserInputAsString();// getting user input for the code
+			countryDAO = new CountryDAO();// creating an object of the data access object class
+			// printing the country related to the code
+			VisualUserInteraction.resultOfFindingCountryByCode(countryDAO.findCountryByCountryCode(enterCountryCode));
 			break;
 
+		// this case is responsible for printing all the countries in the database for a
+		// given set of letters
 		case 3:
-			VisualUserInteraction.enterNameOfCountry();
-			enterCountryName = getUserInputAsString();
+			VisualUserInteraction.enterNameOfCountry();// print out the related prompt
+			enterCountryName = getUserInputAsString();// getting user input for the country name
 			countryDAO = new CountryDAO();
+			// printing all the countries found with that set of letters
 			VisualUserInteraction.showAllCountries(countryDAO.findCountryByName(enterCountryName));
 			break;
 
+		// this case is responsible for adding a new country in the database
 		case 4:
-			VisualUserInteraction.enterCountryCode();
-			enterCountryCode = getUserInputAsString();
+			VisualUserInteraction.enterCountryCode();// print out the related prompt
+			enterCountryCode = getUserInputAsString();// getting user input for code
 
-			VisualUserInteraction.enterNameOfCountry();
-			enterCountryName = getUserInputAsString();
+			VisualUserInteraction.enterNameOfCountry();// print out the related prompt
+			enterCountryName = getUserInputAsString();// getting user input for country name
 
-			VisualUserInteraction.selectContinentName();
-			selectContinentName = getUserInputForContinent();
-			continentName = getContinentName(selectContinentName);
+			VisualUserInteraction.selectContinentName();// print out the related prompt
+			selectContinentName = getUserInputForContinent();// getting user input for continent number selected
+			continentName = getContinentName(selectContinentName);// getting the continent from the number selected
 
-			VisualUserInteraction.enterSurfaceArea();
-			enterSurfaceArea = getSurfaceArea();
+			VisualUserInteraction.enterSurfaceArea();// print out the related prompt
+			enterSurfaceArea = getSurfaceArea();// getting the user input for surface area
 
-			VisualUserInteraction.enterHeadOfState();
-			enterHeadOfState = getUserInputAsString();
+			VisualUserInteraction.enterHeadOfState();// print out the related prompt
+			enterHeadOfState = getUserInputAsString();// getting the user input for head of state
 
+			// passing all the user input that will be used to create an object
 			createNewCountry(enterCountryCode, enterCountryName, continentName, enterSurfaceArea, enterHeadOfState);
 		}
 	}
 
-	private void createNewCountry(String countryCode, String countryName, String continentName, float surfaceArea,
+	private final void createNewCountry(String countryCode, String countryName, String continentName, float surfaceArea,
 			String headOfState) {
-		
-		country = new Country.CountryBuilder().code(countryCode).countryName(countryName)
-				.continent(Continents.getContinent(continentName)).surfaceArea(surfaceArea).headOfState(headOfState).build();
-		
+
+		// creating a new country object using the builder class
+		countryBuilderClass = new CountryBuilderClass.CountryBuilder().code(countryCode).countryName(countryName)
+				.continent(Continents.getContinent(continentName)).surfaceArea(surfaceArea).headOfState(headOfState)
+				.build();
+
 		countryDAO = new CountryDAO();
-		countryDAO.addNewCountry(country);
+		countryDAO.addNewCountry(countryBuilderClass);// passing the object to add a new country in the database
 	}
 
 	private String getUserInputAsString() {
 		String input = "";
 		boolean isValid = false;
+		// do while to validate a wrong input
 		do {
 			try {
-				input = bufferedReader.readLine();
+				input = bufferedReader.readLine();// get user input
 			} catch (Exception e) {
-				System.out.println("Something is wrong! Please follow the instructions");
+				VisualUserInteraction.somethingIsWrong();// print related message
 				isValid = false;
 			}
 			if (input.isEmpty()) {
 				System.out.println("Blank entry is not allowed");
 				isValid = false;
 			} else
-				isValid = true;
-		} while (isValid != true);
+				isValid = true;// setting boolean to true
+		} while (isValid != true);// while boolean is not true keep going
 		return input;
 	}
 
@@ -118,9 +129,10 @@ public class Client {
 			try {
 				selectContinentName = Integer.parseInt(bufferedReader.readLine());
 			} catch (Exception e) {
-				System.out.println("Something is wrong! Please follow the instructions\n");
+				VisualUserInteraction.somethingIsWrong();
 				isValid = false;
 			}
+			// selection should be between 0-8
 			if (selectContinentName > 0 && selectContinentName < 8) {
 				isValid = true;
 			}
@@ -134,9 +146,10 @@ public class Client {
 			try {
 				enterSurfaceArea = Float.parseFloat(bufferedReader.readLine());
 			} catch (Exception e) {
-				System.out.println("Something is wrong! Please follow the instructions\n");
+				VisualUserInteraction.somethingIsWrong();
 				isValid = false;
 			}
+			// surface area should be greater than 0
 			if (enterSurfaceArea > 0) {
 				isValid = true;
 			} else
@@ -145,7 +158,8 @@ public class Client {
 		return enterSurfaceArea;
 	}
 
-	private String getContinentName(int num) {
+	// this method will return the continent at the selected number
+	private final String getContinentName(int num) {
 		switch (num) {
 		case 1:
 			return Continents.Asia.getContinentName();
@@ -164,10 +178,5 @@ public class Client {
 		default:
 			return null;
 		}
-	}
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		new Client();
 	}
 }
