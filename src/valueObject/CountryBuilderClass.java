@@ -2,6 +2,9 @@ package valueObject;
 
 import enumerators.Continents;
 
+/*
+ * this is the builder class that will be used to create objects of new country using builder pattern
+ */
 public class CountryBuilderClass {
 
 	private String code;
@@ -29,6 +32,11 @@ public class CountryBuilderClass {
 	}
 
 	public Continents getContinent() {
+		// patch for null continents
+//		if(continent==null)
+//		{
+//			return Continents.Asia;
+//		}
 		return continent;
 	}
 
@@ -51,7 +59,7 @@ public class CountryBuilderClass {
 
 		public CountryBuilder code(final String code) {
 			this.code = code;
-			return this;
+			return this;//return the Country builder object
 		}
 
 		public CountryBuilder countryName(final String countryName) {
@@ -75,7 +83,7 @@ public class CountryBuilderClass {
 		}
 
 		public CountryBuilderClass build() {
-			return new CountryBuilderClass(this);// return the object country builder
+			return new CountryBuilderClass(this);// return the object parent class country builder
 		}
 	}
 }
